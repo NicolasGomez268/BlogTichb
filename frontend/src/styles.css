@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply min-h-screen bg-tichb-black text-white;
+    background-image:
+      radial-gradient(circle at 10% 10%, rgba(227, 66, 52, 0.22), transparent 34%),
+      radial-gradient(circle at 88% 16%, rgba(255, 255, 255, 0.08), transparent 24%);
+  }
+}
+
+@layer components {
+  .panel-card {
+    @apply mx-auto w-full max-w-4xl rounded-2xl border border-zinc-800/90 bg-zinc-950/70 p-6 shadow-glow;
+  }
+
+  .panel-title {
+    @apply mb-4 mt-1 text-xl font-semibold;
+  }
+
+  .eyebrow {
+    @apply m-0 text-xs font-bold uppercase tracking-[0.08em] text-tichb-vermilionLight;
+  }
+
+  .field-label {
+    @apply mb-1 block text-sm text-zinc-300;
+  }
+
+  .field-input {
+    @apply w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-3 text-white outline-none ring-0 transition focus:border-tichb-vermilion;
+  }
+
+  .field-textarea {
+    @apply field-input min-h-56 resize-y;
+  }
+
+  .btn-primary {
+    @apply rounded-xl bg-gradient-to-br from-tichb-vermilion to-tichb-vermilionLight px-4 py-3 font-bold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70;
+  }
+
+  .btn-primary.big {
+    @apply px-6 py-4 text-base;
+  }
+
+  .btn-secondary {
+    @apply rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-3 font-semibold text-white transition hover:border-zinc-500;
+  }
+
+  .btn-outline {
+    @apply rounded-xl border border-tichb-vermilion bg-transparent px-4 py-2 font-semibold text-white transition hover:bg-tichb-vermilion/20;
+  }
+
+  .btn-danger {
+    @apply rounded-xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-500;
+  }
+
+  .error-text {
+    @apply mt-1 text-sm text-red-300;
+  }
+}
