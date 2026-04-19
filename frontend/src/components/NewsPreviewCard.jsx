@@ -10,17 +10,19 @@ function formatArticleDate(value) {
   });
 }
 
-export default function NewsPreviewCard({ article, actions, fallbackImage }) {
+export default function NewsPreviewCard({ article, actions, fallbackImage, imageFit = "cover" }) {
   const title = article?.title || "Titulo de la noticia";
+  const category = article?.category || "Liga Federal";
   const dateLabel = formatArticleDate(article?.published_at);
   const status = article?.status || "draft";
   const imageUrl = article?.cover_image || fallbackImage || null;
+  const imageObjectClass = imageFit === "contain" ? "object-contain" : "object-cover";
 
   return (
     <article className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
       <div className="relative aspect-[16/9] w-full bg-zinc-950">
         {imageUrl ? (
-          <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
+          <img src={imageUrl} alt={title} className={`h-full w-full ${imageObjectClass}`} />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-sm text-zinc-500">
             Sin portada
@@ -28,7 +30,7 @@ export default function NewsPreviewCard({ article, actions, fallbackImage }) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
         <span className="absolute left-3 top-3 rounded bg-[#E34234]/90 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-          Liga Federal
+          {category}
         </span>
         <span className="absolute right-3 top-3 rounded-full bg-black/70 px-2 py-1 text-xs font-bold uppercase tracking-wide text-zinc-200">
           {status}

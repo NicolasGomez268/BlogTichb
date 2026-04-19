@@ -65,7 +65,6 @@ export default function PublicHome() {
         <aside className="hidden xl:flex xl:sticky xl:top-4 xl:h-fit xl:flex-col xl:gap-3">
           <AdBanner orientation="vertical" title="Tu marca" subtitle="Visible todo el dia" />
           <AdBanner orientation="vertical" title="Sponsor" subtitle="Alto impacto" />
-          <AdBanner orientation="vertical" title="Promocion" subtitle="Publicidad premium" />
         </aside>
 
         <section className="space-y-4">
@@ -92,16 +91,23 @@ export default function PublicHome() {
             </div>
 
             <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {feedArticles.map((article, index) => (
-                <li key={article.slug} className="space-y-4">
-                  <PublicNewsCard article={article} variant="grid" />
-                  {index === 1 ? (
-                    <div className="xl:hidden">
-                      <AdBanner title="Publicidad estrategica" subtitle="Aparece en medio del scroll" />
-                    </div>
-                  ) : null}
-                </li>
-              ))}
+              {feedArticles.flatMap((article, index) => {
+                const items = [
+                  <li key={article.slug || `trend-item-${index}`} className="space-y-4">
+                    <PublicNewsCard article={article} variant="grid" />
+                  </li>,
+                ];
+
+                if ((index + 1) % 6 === 0) {
+                  items.push(
+                    <li key={`trend-ad-${index}`} className="md:col-span-2 xl:col-span-3">
+                      <AdBanner title="Envios rapidos y seguros" subtitle="Reserva este espacio en tendencias" />
+                    </li>,
+                  );
+                }
+
+                return items;
+              })}
             </ul>
           </section>
         </section>
@@ -109,7 +115,6 @@ export default function PublicHome() {
         <aside className="hidden xl:flex xl:sticky xl:top-4 xl:h-fit xl:flex-col xl:gap-3">
           <AdBanner orientation="vertical" title="Campana" subtitle="Llegas a toda la audiencia" />
           <AdBanner orientation="vertical" title="Anuncia aqui" subtitle="En desktop queda siempre visible" />
-          <AdBanner orientation="vertical" title="Tu negocio" subtitle="Consultanos por paquetes" />
         </aside>
       </div>
     </main>

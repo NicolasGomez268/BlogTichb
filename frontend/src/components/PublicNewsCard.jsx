@@ -14,8 +14,10 @@ function formatDate(value) {
 
 export default function PublicNewsCard({ article, variant = "grid" }) {
   const title = article?.title || "Noticia";
+  const category = article?.category || "Liga Federal de Basquet";
   const imageUrl = article?.cover_image || "";
-  const excerpt = (article?.content || "").slice(0, 170);
+  const excerptSource = article?.lead || article?.content || "";
+  const excerpt = excerptSource.replace(/\*\*/g, "").slice(0, 170);
   const dateLabel = formatDate(article?.published_at);
   const slug = article?.slug || "";
 
@@ -28,10 +30,12 @@ export default function PublicNewsCard({ article, variant = "grid" }) {
 
   const titleClass =
     variant === "hero"
-      ? "text-3xl sm:text-5xl leading-tight"
+      ? "text-2xl sm:text-4xl leading-tight"
       : variant === "side"
-        ? "text-2xl leading-tight"
-        : "text-xl leading-snug";
+        ? "text-xl leading-tight"
+        : "text-lg leading-snug";
+
+  const excerptClass = variant === "hero" ? "text-sm sm:text-base" : "text-sm";
 
   return (
     <Link to={slug ? `/noticia/${slug}` : "#"} className={`group relative block overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 ${cardClass}`}>
@@ -47,11 +51,11 @@ export default function PublicNewsCard({ article, variant = "grid" }) {
 
       <div className="relative z-10 flex h-full flex-col justify-end p-4 sm:p-6">
         <p className="inline-flex w-fit rounded bg-[#E34234]/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-white">
-          Liga Federal de Basquet
+          {category}
         </p>
         <h3 className={`mt-3 font-extrabold text-white ${titleClass}`}>{title}</h3>
         {variant === "hero" ? (
-          <p className="mt-2 max-w-3xl text-base text-zinc-200">{excerpt}</p>
+          <p className={`mt-2 max-w-3xl text-zinc-200 ${excerptClass}`}>{excerpt}</p>
         ) : null}
         <p className="mt-3 text-sm text-zinc-300">{dateLabel}</p>
       </div>

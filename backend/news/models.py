@@ -8,6 +8,8 @@ class Article(models.Model):
         PUBLISHED = "published", "Publicado"
 
     title = models.CharField(max_length=220)
+    category = models.CharField(max_length=120, default="Liga Federal de Basquet")
+    lead = models.TextField(blank=True, default="")
     slug = models.SlugField(max_length=240, unique=True)
     content = models.TextField()
     cover_image = models.ImageField(upload_to="articles/covers/")

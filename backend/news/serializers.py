@@ -10,6 +10,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "title",
+            "category",
+            "lead",
             "slug",
             "content",
             "cover_image",

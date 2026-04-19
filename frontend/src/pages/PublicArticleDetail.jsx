@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import AdBanner from "../components/AdBanner";
+import tichbLogo from "../assets/tichblogo.png";
 import { apiRequest } from "../lib/api";
+import { renderRichText } from "../lib/richText.jsx";
+
+function stripBasicFormatting(value) {
+  return (value || "").trim();
+}
 
 export default function PublicArticleDetail() {
   const { slug } = useParams();
@@ -34,36 +39,69 @@ export default function PublicArticleDetail() {
     loadArticle();
   }, [slug]);
 
+  const publishedLabel = article?.published_at
+    ? new Date(article.published_at).toLocaleString("es-AR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "Sin fecha";
+
+  const leadText = stripBasicFormatting(article?.lead) || "Sin bajada";
+
   return (
-    <main className="min-h-screen px-4 py-6">
-      <div className="mx-auto max-w-[980px] space-y-4">
-        <Link to="/" className="inline-flex items-center rounded-lg border border-zinc-700 px-3 py-2 text-sm font-semibold text-zinc-200 hover:border-zinc-500">
-          Volver al inicio
-        </Link>
+    <main className="min-h-screen px-3 py-4 sm:px-4 sm:py-6">
+      <div className="mx-auto w-full max-w-[460px] sm:max-w-[980px]">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <Link to="/" className="inline-flex items-center rounded-lg border border-zinc-700 px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-zinc-200 hover:border-zinc-500 sm:text-sm">
+            Volver al inicio
+          </Link>
+
+          <img
+            src={tichbLogo}
+            alt="Tich Basketball"
+            className="h-9 w-auto object-contain opacity-95 sm:h-10"
+          />
+        </div>
 
         {loading ? <p className="text-zinc-300">Cargando nota...</p> : null}
         {error ? <p className="error-text">{error}</p> : null}
 
         {article ? (
-          <article className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950/70">
-            <div className="aspect-[16/9] w-full bg-zinc-900">
-              {article.cover_image ? (
-                <img src={article.cover_image} alt={article.title} className="h-full w-full object-cover" />
-              ) : null}
+          <article className="space-y-5">
+            <div className="space-y-4">
+              <p className="text-xs text-zinc-300 sm:text-sm">{publishedLabel}</p>
+
+              <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[#E06A1B] sm:text-base">
+                {article.category || "Liga Federal de Basquet"}
+              </p>
+
+              <h1 className="text-4xl font-black leading-[1.08] text-white sm:text-5xl">
+                {article.title}
+              </h1>
+
+              <p className="font-serif text-xl italic leading-relaxed text-zinc-200 sm:max-w-4xl">
+                {renderRichText(leadText)}
+              </p>
             </div>
-            <div className="space-y-4 p-5">
-              <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">{article.title}</h1>
-              <p className="text-sm text-zinc-300">
-                {new Date(article.published_at).toLocaleString("es-AR")}
-              </p>
-              <p className="whitespace-pre-wrap text-lg leading-relaxed text-zinc-100">
-                {article.content}
-              </p>
+
+            <div className="flex w-full items-center justify-center">
+              {article.cover_image ? (
+                <img
+                  src={article.cover_image}
+                  alt={article.title}
+                  className="h-auto max-h-[85vh] w-auto max-w-full rounded-lg object-contain"
+                />
+              ) : <div className="w-full rounded-lg border border-zinc-800 py-10 text-center text-sm text-zinc-500">Sin imagen</div>}
+            </div>
+
+            <div className="space-y-4 font-sans text-lg leading-relaxed text-zinc-100">
+              <p>{renderRichText(article.content)}</p>
             </div>
           </article>
         ) : null}
-
-        <AdBanner title="Publicidad en detalle" subtitle="Posicion premium para monetizacion" />
       </div>
     </main>
   );
