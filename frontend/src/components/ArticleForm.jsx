@@ -5,7 +5,7 @@ import NewsPreviewCard from "./NewsPreviewCard";
 
 const initialFormState = {
   title: "",
-  category: "Liga Federal de Basquet",
+  category: "Torneo TIHB",
   lead: "",
   content: "",
   status: "draft",
@@ -29,7 +29,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
 
     setFormData({
       title: initialArticle.title || "",
-      category: initialArticle.category || "Liga Federal de Basquet",
+      category: initialArticle.category || "Torneo TIHB",
       lead: initialArticle.lead || "",
       content: initialArticle.content || "",
       status: initialArticle.status || "draft",
@@ -293,7 +293,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
         <NewsPreviewCard
           article={{
             title: formData.title || "Titulo de la noticia",
-            category: formData.category || "Liga Federal de Basquet",
+            category: formData.category || "Torneo TIHB",
             published_at: new Date().toISOString(),
             status: formData.status,
             cover_image: previewImageUrl || initialArticle?.images?.[0] || initialArticle?.cover_image,

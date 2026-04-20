@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import easytechImage from "../assets/Easytech1.png";
 import easytechDesktopImage from "../assets/Easytech2.png";
@@ -44,6 +45,26 @@ export default function PublicHome() {
 
   return (
     <main className="min-h-screen px-2 pb-10 pt-4 sm:px-4">
+      <div className="mb-2 flex items-center justify-between px-2 sm:px-4">
+        <a
+          href="https://www.instagram.com/tichb_ok?igsh=b3JmZGhqZnFnMDg="
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram de Tichb"
+          className="text-zinc-400/75 transition hover:text-zinc-200"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
+            <path d="M7 2C4.239 2 2 4.239 2 7v10c0 2.761 2.239 5 5 5h10c2.761 0 5-2.239 5-5V7c0-2.761-2.239-5-5-5H7zm0 2h10c1.657 0 3 1.343 3 3v10c0 1.657-1.343 3-3 3H7c-1.657 0-3-1.343-3-3V7c0-1.657 1.343-3 3-3zm11.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z" />
+          </svg>
+        </a>
+        <Link
+          to="/login"
+          className="rounded border border-zinc-600/40 bg-transparent px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.08em] text-zinc-400/70 transition hover:border-zinc-500/60 hover:text-zinc-300"
+        >
+          Iniciar sesion
+        </Link>
+      </div>
+
       <div className="mb-4 px-2 py-3 sm:px-4">
         <div className="flex items-center justify-center gap-4 text-left sm:gap-6">
           <img
