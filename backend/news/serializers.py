@@ -30,6 +30,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
         extra_kwargs = {
             "slug": {"required": False, "allow_blank": True},
+            "cover_image": {"required": False, "allow_null": True},
         }
 
     def get_images(self, obj):
