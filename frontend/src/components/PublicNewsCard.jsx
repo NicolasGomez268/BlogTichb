@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
+import { resolveMediaUrl } from "../lib/api";
+
 function formatDate(value) {
   if (!value) {
     return "Sin fecha";
@@ -18,10 +20,10 @@ export default function PublicNewsCard({ article, variant = "grid" }) {
   const category = article?.category || "Liga Federal de Basquet";
   const imageList = useMemo(() => {
     if (Array.isArray(article?.images) && article.images.length > 0) {
-      return article.images;
+      return article.images.map((image) => resolveMediaUrl(image));
     }
 
-    return article?.cover_image ? [article.cover_image] : [];
+    return article?.cover_image ? [resolveMediaUrl(article.cover_image)] : [];
   }, [article]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const imageUrl = imageList[currentImageIndex] || "";

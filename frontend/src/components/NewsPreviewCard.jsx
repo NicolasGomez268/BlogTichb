@@ -1,3 +1,5 @@
+import { resolveMediaUrl } from "../lib/api";
+
 function formatArticleDate(value) {
   if (!value) {
     return "Sin fecha";
@@ -15,7 +17,7 @@ export default function NewsPreviewCard({ article, actions, fallbackImage, image
   const category = article?.category || "Liga Federal";
   const dateLabel = formatArticleDate(article?.published_at);
   const status = article?.status || "draft";
-  const imageUrl = article?.cover_image || fallbackImage || null;
+  const imageUrl = resolveMediaUrl(article?.cover_image || fallbackImage || "") || null;
   const imageObjectClass = imageFit === "contain" ? "object-contain" : "object-cover";
 
   return (

@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import easytechMobileImage from "../assets/Easytech2.png";
 import tichbLogo from "../assets/tichblogo.png";
 import AdBanner from "../components/AdBanner";
-import { apiRequest } from "../lib/api";
+import { apiRequest, resolveMediaUrl } from "../lib/api";
 import { renderRichText } from "../lib/richText.jsx";
 
 function stripBasicFormatting(value) {
@@ -55,8 +55,8 @@ export default function PublicArticleDetail() {
 
   const leadText = stripBasicFormatting(article?.lead) || "Sin bajada";
   const imageList = Array.isArray(article?.images) && article.images.length > 0
-    ? article.images
-    : (article?.cover_image ? [article.cover_image] : []);
+    ? article.images.map((image) => resolveMediaUrl(image))
+    : (article?.cover_image ? [resolveMediaUrl(article.cover_image)] : []);
 
   useEffect(() => {
     setCurrentImageIndex(0);
