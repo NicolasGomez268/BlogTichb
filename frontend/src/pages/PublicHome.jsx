@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 
+import easytechImage from "../assets/Easytech1.png";
+import easytechDesktopImage from "../assets/Easytech2.png";
+import kineImage from "../assets/KINE.png";
+import rafakineImage from "../assets/rafakine.jpeg";
 import tichbLogo from "../assets/tichblogo.png";
 import AdBanner from "../components/AdBanner";
 import PublicNewsCard from "../components/PublicNewsCard";
@@ -82,7 +86,23 @@ export default function PublicHome() {
             </div>
           ) : null}
 
-          <AdBanner title="Envios rapidos y seguros" subtitle="Reserva este espacio en el home" />
+          <a
+            href="https://www.instagram.com/kine.rafaknezev?igsh=aGQzeWcyYWpvYms3&utm_source=qr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative mx-auto block h-[250px] w-[380px] max-w-full overflow-hidden rounded-2xl border border-zinc-800 sm:h-[240px] lg:h-[200px] lg:w-full lg:max-w-[1000px]"
+            aria-label="Publicidad"
+          >
+            <picture>
+              <source media="(min-width: 1024px)" srcSet={kineImage} />
+              <source media="(max-width: 1023px)" srcSet={rafakineImage} />
+              <img
+                src={rafakineImage}
+                alt="Publicidad Rafakine"
+                className="h-full w-full object-cover"
+              />
+            </picture>
+          </a>
 
           <section>
             <div className="mb-3 flex items-center gap-2">
@@ -101,7 +121,34 @@ export default function PublicHome() {
                 if ((index + 1) % 6 === 0) {
                   items.push(
                     <li key={`trend-ad-${index}`} className="md:col-span-2 xl:col-span-3">
-                      <AdBanner title="Envios rapidos y seguros" subtitle="Reserva este espacio en tendencias" />
+                      <a
+                        href="https://www.instagram.com/easytechh_?igsh=MTE4a2RhbXp4ZHd3Zw=="
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative mx-auto block h-[250px] w-[380px] max-w-full overflow-hidden rounded-2xl border border-zinc-800 sm:h-[240px] md:hidden"
+                        aria-label="Publicidad"
+                      >
+                        <img
+                          src={easytechImage}
+                          alt="Publicidad EasyTech"
+                          className="h-full w-full object-cover"
+                        />
+                      </a>
+                      <div className="hidden md:block">
+                        <a
+                          href="https://www.instagram.com/easytechh_?igsh=MTE4a2RhbXp4ZHd3Zw=="
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative mx-auto block h-[250px] w-[380px] max-w-full overflow-hidden rounded-2xl border border-zinc-800 sm:h-[240px] lg:h-[200px] lg:w-full lg:max-w-[1000px]"
+                          aria-label="Publicidad"
+                        >
+                          <img
+                            src={easytechDesktopImage}
+                            alt="Publicidad EasyTech"
+                            className="h-full w-full object-cover"
+                          />
+                        </a>
+                      </div>
                     </li>,
                   );
                 }
@@ -110,6 +157,7 @@ export default function PublicHome() {
               })}
             </ul>
           </section>
+
         </section>
 
         <aside className="hidden xl:flex xl:sticky xl:top-4 xl:h-fit xl:flex-col xl:gap-3">
@@ -117,6 +165,17 @@ export default function PublicHome() {
           <AdBanner orientation="vertical" title="Anuncia aqui" subtitle="En desktop queda siempre visible" />
         </aside>
       </div>
+
+      <footer className="mt-8 pb-2 text-center text-sm text-zinc-300">
+        <a
+          href="https://www.easytech.ar/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-200 underline decoration-zinc-500/70 underline-offset-4 transition hover:text-white"
+        >
+          Desarrollado por EasyTech
+        </a>
+      </footer>
     </main>
   );
 }

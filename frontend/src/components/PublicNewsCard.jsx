@@ -25,7 +25,7 @@ export default function PublicNewsCard({ article, variant = "grid" }) {
     variant === "hero"
       ? "min-h-[360px] sm:min-h-[420px]"
       : variant === "side"
-        ? "min-h-[175px]"
+        ? "min-h-[240px] lg:min-h-[175px]"
         : "min-h-[240px]";
 
   const titleClass =
@@ -53,7 +53,7 @@ export default function PublicNewsCard({ article, variant = "grid" }) {
         <p className="inline-flex w-fit rounded bg-[#E34234]/90 px-2 py-1 text-xs font-bold uppercase tracking-[0.1em] text-white">
           {category}
         </p>
-        <h3 className={`mt-3 font-extrabold text-white ${titleClass}`}>{title}</h3>
+        <h3 className={`mt-3 break-words font-extrabold text-white ${titleClass}`}>{title}</h3>
         {variant === "hero" ? (
           <p className={`mt-2 max-w-3xl text-zinc-200 ${excerptClass}`}>{excerpt}</p>
         ) : null}

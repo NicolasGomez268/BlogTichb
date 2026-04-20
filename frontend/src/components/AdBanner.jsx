@@ -9,7 +9,9 @@ export default function AdBanner({
     <aside
       className={[
         "relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br from-[#0c2f59] via-[#103f77] to-[#0f2a4d]",
-        isVertical ? "min-h-[320px]" : "min-h-[190px] sm:min-h-[220px]",
+        isVertical
+          ? "min-h-[320px]"
+          : "h-[190px] sm:h-[220px] lg:h-[200px] w-full lg:mx-auto lg:max-w-[1000px]",
       ].join(" ")}
       aria-label="Publicidad"
     >
