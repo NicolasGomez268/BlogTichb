@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 function formatDate(value) {
@@ -15,7 +16,15 @@ function formatDate(value) {
 export default function PublicNewsCard({ article, variant = "grid" }) {
   const title = article?.title || "Noticia";
   const category = article?.category || "Liga Federal de Basquet";
-  const imageUrl = article?.cover_image || "";
+  const imageList = useMemo(() => {
+    if (Array.isArray(article?.images) && article.images.length > 0) {
+      return article.images;
+    }
+
+    return article?.cover_image ? [article.cover_image] : [];
+  }, [article]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const imageUrl = imageList[currentImageIndex] || "";
   const excerptSource = article?.lead || article?.content || "";
   const excerpt = excerptSource.replace(/\*\*/g, "").slice(0, 170);
   const dateLabel = formatDate(article?.published_at);
@@ -36,6 +45,22 @@ export default function PublicNewsCard({ article, variant = "grid" }) {
         : "text-lg leading-snug";
 
   const excerptClass = variant === "hero" ? "text-sm sm:text-base" : "text-sm";
+
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [article?.slug]);
+
+  useEffect(() => {
+    if (imageList.length <= 1) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageList.length);
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, [imageList]);
 
   return (
     <Link to={slug ? `/noticia/${slug}` : "#"} className={`group relative block overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 ${cardClass}`}>

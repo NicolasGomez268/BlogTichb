@@ -14,7 +14,7 @@ const initialFormState = {
 export default function ArticleForm({ token, initialArticle, onSaved, onCancel }) {
   const isEditing = Boolean(initialArticle?.slug);
   const [formData, setFormData] = useState(initialFormState);
-  const [coverFile, setCoverFile] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [previewImageUrl, setPreviewImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -22,7 +22,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
   useEffect(() => {
     if (!initialArticle) {
       setFormData(initialFormState);
-      setCoverFile(null);
+      setUploadedFiles([]);
       setPreviewImageUrl("");
       return;
     }
@@ -34,26 +34,54 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
       content: initialArticle.content || "",
       status: initialArticle.status || "draft",
     });
-    setCoverFile(null);
-    setPreviewImageUrl(initialArticle.cover_image || "");
+    setUploadedFiles([]);
+    setPreviewImageUrl(initialArticle.images?.[0] || initialArticle.cover_image || "");
   }, [initialArticle]);
 
   useEffect(() => {
-    if (!coverFile) {
+    if (uploadedFiles.length === 0) {
       return;
     }
 
-    const objectUrl = URL.createObjectURL(coverFile);
+    const objectUrl = URL.createObjectURL(uploadedFiles[0]);
     setPreviewImageUrl(objectUrl);
 
     return () => {
       URL.revokeObjectURL(objectUrl);
     };
-  }, [coverFile]);
+  }, [uploadedFiles]);
 
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleImagesChange(event) {
+    const files = Array.from(event.target.files || []);
+    setErrorMessage("");
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const mergedFiles = [...uploadedFiles, ...files];
+    const uniqueFiles = mergedFiles.filter((file, index, array) => {
+      const firstIndex = array.findIndex(
+        (candidate) =>
+          candidate.name === file.name
+          && candidate.size === file.size
+          && candidate.lastModified === file.lastModified,
+      );
+      return firstIndex === index;
+    });
+
+    if (uniqueFiles.length > 5) {
+      setErrorMessage("Solo se permiten hasta 5 fotos por noticia");
+      setUploadedFiles(uniqueFiles.slice(0, 5));
+      return;
+    }
+
+    setUploadedFiles(uniqueFiles);
   }
 
   function wrapSelectedText(event, targetId, prefix, suffix = prefix) {
@@ -90,8 +118,10 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
       payload.append("content", formData.content);
       payload.append("status", formData.status);
 
-      if (coverFile) {
-        payload.append("cover_image", coverFile);
+      if (uploadedFiles.length > 0) {
+        uploadedFiles.forEach((file) => payload.append("uploaded_images", file));
+      } else if (!isEditing) {
+        throw new Error("Debes subir al menos una foto");
       }
 
       const endpoint = isEditing ? `/articles/${initialArticle.slug}/` : "/articles/";
@@ -117,7 +147,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
 
       if (!isEditing) {
         setFormData(initialFormState);
-        setCoverFile(null);
+        setUploadedFiles([]);
         setPreviewImageUrl("");
       }
 
@@ -160,18 +190,33 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
           required
         />
 
-        <label className="field-label" htmlFor="cover_image">
-          Portada
+        <label className="field-label" htmlFor="uploaded_images">
+          Fotos (maximo 5)
         </label>
         <input
-          id="cover_image"
-          name="cover_image"
+          id="uploaded_images"
+          name="uploaded_images"
           className="field-input"
           type="file"
+          multiple
           accept="image/*"
-          onChange={(event) => setCoverFile(event.target.files?.[0] || null)}
-          required={!isEditing}
+          onChange={handleImagesChange}
         />
+        <p className="text-xs text-zinc-400">
+          Si subis varias, la primera se usa como imagen principal de la noticia.
+        </p>
+        {uploadedFiles.length > 0 ? (
+          <div className="rounded-lg border border-zinc-700/80 bg-zinc-950/50 p-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.06em] text-zinc-300">
+              {uploadedFiles.length} foto(s) seleccionada(s)
+            </p>
+            <ul className="mt-2 space-y-1 text-xs text-zinc-400">
+              {uploadedFiles.map((file) => (
+                <li key={`${file.name}-${file.lastModified}`}>{file.name}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </section>
 
       <section className="mt-4 space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4">
@@ -251,7 +296,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
             category: formData.category || "Liga Federal de Basquet",
             published_at: new Date().toISOString(),
             status: formData.status,
-            cover_image: coverFile ? previewImageUrl : previewImageUrl || initialArticle?.cover_image,
+            cover_image: previewImageUrl || initialArticle?.images?.[0] || initialArticle?.cover_image,
           }}
           imageFit="contain"
         />

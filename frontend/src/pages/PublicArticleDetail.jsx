@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import easytechMobileImage from "../assets/Easytech2.png";
 import tichbLogo from "../assets/tichblogo.png";
 import AdBanner from "../components/AdBanner";
 import { apiRequest } from "../lib/api";
@@ -15,6 +16,8 @@ export default function PublicArticleDetail() {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(0);
 
   useEffect(() => {
     async function loadArticle() {
@@ -51,6 +54,47 @@ export default function PublicArticleDetail() {
     : "Sin fecha";
 
   const leadText = stripBasicFormatting(article?.lead) || "Sin bajada";
+  const imageList = Array.isArray(article?.images) && article.images.length > 0
+    ? article.images
+    : (article?.cover_image ? [article.cover_image] : []);
+
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [slug]);
+
+  function showNextImage() {
+    if (imageList.length <= 1) {
+      return;
+    }
+
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageList.length);
+  }
+
+  function showPrevImage() {
+    if (imageList.length <= 1) {
+      return;
+    }
+
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + imageList.length) % imageList.length);
+  }
+
+  function handleTouchStart(event) {
+    setTouchStartX(event.changedTouches[0].clientX);
+  }
+
+  function handleTouchEnd(event) {
+    const delta = event.changedTouches[0].clientX - touchStartX;
+
+    if (Math.abs(delta) < 40) {
+      return;
+    }
+
+    if (delta < 0) {
+      showNextImage();
+    } else {
+      showPrevImage();
+    }
+  }
 
   return (
     <main className="min-h-screen overflow-x-hidden px-3 py-4 sm:px-4 sm:py-6">
@@ -94,15 +138,66 @@ export default function PublicArticleDetail() {
                 </p>
               </div>
 
-              <div className="flex w-full items-center justify-center">
-                {article.cover_image ? (
+              <div className="relative flex w-full items-center justify-center">
+                {imageList.length > 0 ? (
                   <img
-                    src={article.cover_image}
+                    src={imageList[currentImageIndex]}
                     alt={article.title}
                     className="h-auto max-h-[85vh] w-auto max-w-full rounded-lg object-contain"
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
                   />
                 ) : <div className="w-full rounded-lg border border-zinc-800 py-10 text-center text-sm text-zinc-500">Sin imagen</div>}
+
+                {imageList.length > 1 ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={showPrevImage}
+                      className="absolute left-2 hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-500 bg-black/55 text-lg font-bold text-white transition hover:border-zinc-300 hover:bg-black/70 md:flex"
+                      aria-label="Foto anterior"
+                    >
+                      &lt;
+                    </button>
+                    <button
+                      type="button"
+                      onClick={showNextImage}
+                      className="absolute right-2 hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-500 bg-black/55 text-lg font-bold text-white transition hover:border-zinc-300 hover:bg-black/70 md:flex"
+                      aria-label="Foto siguiente"
+                    >
+                      &gt;
+                    </button>
+                  </>
+                ) : null}
               </div>
+
+              {imageList.length > 1 ? (
+                <div className="flex items-center justify-center gap-2">
+                  {imageList.map((image, index) => (
+                    <button
+                      key={`${image}-${index}`}
+                      type="button"
+                      onClick={() => setCurrentImageIndex(index)}
+                      className={`h-2.5 w-2.5 rounded-full ${index === currentImageIndex ? "bg-white" : "bg-zinc-600"}`}
+                      aria-label={`Ver foto ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              ) : null}
+
+              <a
+                href="https://www.instagram.com/easytechh_?igsh=MTE4a2RhbXp4ZHd3Zw=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950/40 md:hidden"
+                aria-label="Publicidad"
+              >
+                <img
+                  src={easytechMobileImage}
+                  alt="Publicidad EasyTech"
+                  className="h-auto w-full object-contain"
+                />
+              </a>
 
               <div className="space-y-4 break-words font-sans text-lg leading-relaxed text-zinc-100">
                 <p>{renderRichText(article.content)}</p>

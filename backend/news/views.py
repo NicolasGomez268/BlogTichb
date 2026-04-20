@@ -12,7 +12,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        base_queryset = Article.objects.order_by("-published_at")
+        base_queryset = Article.objects.prefetch_related("extra_images").order_by("-published_at")
 
         if self.request.user.is_authenticated:
             return base_queryset
