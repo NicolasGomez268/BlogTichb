@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
 
@@ -36,6 +36,9 @@ export default function Login() {
   return (
     <main className="grid min-h-screen place-items-center px-4 py-10">
       <section className="panel-card max-w-2xl">
+        <Link to="/" className="mb-4 inline-flex text-sm text-zinc-300 transition hover:text-white">
+          ← Volver al inicio
+        </Link>
         <p className="eyebrow">Noticias Tichb</p>
         <h1 className="mb-5 mt-1 text-3xl font-semibold">Panel del periodista</h1>
 

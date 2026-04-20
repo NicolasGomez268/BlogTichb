@@ -5,7 +5,7 @@ import NewsPreviewCard from "./NewsPreviewCard";
 
 const initialFormState = {
   title: "",
-  category: "Torneo TIHB",
+  category: "Torneo TICHB",
   lead: "",
   content: "",
   status: "draft",
@@ -29,7 +29,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
 
     setFormData({
       title: initialArticle.title || "",
-      category: initialArticle.category || "Torneo TIHB",
+      category: initialArticle.category || "Torneo TICHB",
       lead: initialArticle.lead || "",
       content: initialArticle.content || "",
       status: initialArticle.status || "draft",
@@ -161,6 +161,9 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
 
   return (
     <form className="panel-card" onSubmit={handleSubmit}>
+      <button className="btn-secondary mb-2" type="button" onClick={onCancel}>
+        ← Volver atras
+      </button>
       <h2 className="panel-title">{isEditing ? "Editar noticia" : "Nueva noticia"}</h2>
 
       <section className="space-y-3 rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4">
@@ -293,7 +296,7 @@ export default function ArticleForm({ token, initialArticle, onSaved, onCancel }
         <NewsPreviewCard
           article={{
             title: formData.title || "Titulo de la noticia",
-            category: formData.category || "Torneo TIHB",
+            category: formData.category || "Torneo TICHB",
             published_at: new Date().toISOString(),
             status: formData.status,
             cover_image: previewImageUrl || initialArticle?.images?.[0] || initialArticle?.cover_image,

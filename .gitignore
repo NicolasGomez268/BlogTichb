@@ -17,6 +17,15 @@ backend/staticfiles/
 frontend/node_modules/
 frontend/dist/
 
+# Environment files
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production
+frontend/.env.production.local
+
 # OS/Editor
 .vscode/
 .DS_Store

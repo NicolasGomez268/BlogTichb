@@ -44,7 +44,7 @@ export default function PublicHome() {
   const feedArticles = useMemo(() => articles.slice(3), [articles]);
 
   return (
-    <main className="min-h-screen px-2 pb-10 pt-4 sm:px-4">
+    <main className="min-h-screen overflow-x-hidden px-2 pb-10 pt-4 sm:px-4">
       <div className="mb-2 flex items-center justify-between px-2 sm:px-4">
         <a
           href="https://www.instagram.com/tichb_ok?igsh=b3JmZGhqZnFnMDg="
@@ -66,20 +66,20 @@ export default function PublicHome() {
       </div>
 
       <div className="mb-4 px-2 py-3 sm:px-4">
-        <div className="flex items-center justify-center gap-4 text-left sm:gap-6">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-center sm:flex-nowrap sm:gap-6 sm:text-left">
           <img
             src={tichbLogo}
             alt="Tich Basketball"
-            className="h-20 w-auto object-contain sm:h-24"
+            className="h-16 w-auto object-contain sm:h-24"
           />
           <div>
-            <p className="text-3xl font-black uppercase leading-none tracking-[0.08em] text-white sm:text-5xl">
+            <p className="text-2xl font-black uppercase leading-none tracking-[0.06em] text-white sm:text-5xl sm:tracking-[0.08em]">
               Noticias
             </p>
-            <p className="mt-1 text-3xl font-black uppercase leading-none tracking-[0.08em] text-[#E34234] sm:text-5xl">
+            <p className="mt-1 text-2xl font-black uppercase leading-none tracking-[0.06em] text-[#E34234] sm:text-5xl sm:tracking-[0.08em]">
               Tichb
             </p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-300 sm:text-base">
+            <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-300 sm:text-base sm:tracking-[0.16em]">
               Resistencia - CHACO
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function PublicHome() {
           <AdBanner orientation="vertical" title="Sponsor" subtitle="Alto impacto" />
         </aside>
 
-        <section className="space-y-4">
+        <section className="min-w-0 space-y-4">
           {loading ? <p className="text-zinc-300">Cargando noticias...</p> : null}
           {error ? <p className="error-text">{error}</p> : null}
 
