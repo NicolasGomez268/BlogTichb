@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import ProtectedRoute from "./auth/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -7,6 +8,16 @@ import PublicArticleDetail from "./pages/PublicArticleDetail";
 import PublicHome from "./pages/PublicHome";
 
 export default function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
   return (
     <Routes>
       <Route path="/" element={<PublicHome />} />
